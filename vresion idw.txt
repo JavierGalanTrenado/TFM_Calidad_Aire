@@ -1,0 +1,432 @@
+# script global.R
+#install.packages("broom")
+#install.packages("googlesheets4")
+library(shiny)
+ 
+
+# lectura de datos
+  
+library(fpp2)
+require(gridExtra)
+  
+
+anyo22 <-read.csv("datos202212.csv",sep=';')
+anyoxx <-read.csv("datos202212.csv",sep=';')
+str(anyo22)
+#  vamos a limpiar quito provimcia y municipio
+anyoxx <- select(anyoxx,-PROVINCIA,-MUNICIPIO)
+anyo22 <- select(anyo22,-PROVINCIA,-MUNICIPIO)
+
+anyo22 <-anyo22[anyo22$MAGNITUD=='6'|anyo22$MAGNITUD=='8'|anyo22$MAGNITUD=='9'|anyo22$MAGNITUD=='10'|anyo22$MAGNITUD=='12'|anyo22$MAGNITUD=='14',]
+anyoxx <-anyoxx[anyoxx$MAGNITUD=='6'|anyoxx$MAGNITUD=='8'|anyoxx$MAGNITUD=='9'|anyoxx$MAGNITUD=='10'|anyoxx$MAGNITUD=='12'|anyoxx$MAGNITUD=='14',]
+
+####
+
+5%% 2==0
+
+for (jj in 1:10)
+{
+  if (jj==9)
+  {
+    next
+  }
+  
+  print(jj)
+  
+}
+ 
+
+## funcion que limpia valores No vlaidos N
+limpia_valoresN<- function(anyox2) {
+  
+  
+
+
+for (i in 1:length(anyox2[,1])) 
+  # codigo
+  for (j in 7:67)
+  {
+    if (j%% 2==0)
+    {
+      next
+    }
+    if (anyox2[i,j]=="N")
+      
+    { anyox2[i,(j-1)]=NA
+      }
+  
+#print(anyox2[i,]$V01)
+#if (anyox2[i,]$V01 == "N")
+ # {
+  #  anyox2[i,]$D01 = 0.00
+# }
+   
+# Código
+
+    }
+#####
+
+return(anyox2)
+}  
+
+anyo22 <-limpia_valoresN(anyo22)
+
+# tenemos el prolblema que al hacer la media cuenta los valores 0
+# vamos a reemplazar los valores 0.00 por NA ,ya que son valores que no estan medido y gracias a esto podemos hacer media
+
+##anyo22[anyo22==0.00] <-NA ya no hace falta
+
+anyo22<-anyo22 %>%
+  mutate("media" = rowMeans (select(anyo22, c(6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66)),na.rm=TRUE))
+
+
+
+### año 21 ###
+
+anyo21 <-read.csv("datos202112.csv",sep=';')
+
+str(anyo21)
+#  vamos a limpiar quito provimcia y municipio
+
+anyo21 <- select(anyo21,-PROVINCIA,-MUNICIPIO)
+
+anyo21 <-anyo21[anyo21$MAGNITUD=='6'|anyo21$MAGNITUD=='8'|anyo21$MAGNITUD=='9'|anyo21$MAGNITUD=='10'|anyo21$MAGNITUD=='12'|anyo21$MAGNITUD=='14',]
+
+str(anyo21)
+# tenemos el prolblema que al hacer la media cuenta los valores N
+# vamos a reemplazar los valores N por NA
+# vamos a reemplazar los valores 0.00 por NA ,ya que son valores que no estan medido y gracias a esto podemos hacer media
+
+#anyo21[anyo21==0.00] <-NA
+anyo21 <-limpia_valoresN(anyo21)
+anyo21<-anyo21 %>%
+  mutate("media" = rowMeans (select(anyo21, c(6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66)),na.rm=TRUE))
+
+
+#### añyo 19
+anyo19 <-read.csv("datos201912.csv",sep=';')
+
+str(anyo19)
+#  vamos a limpiar quito provimcia y municipio
+
+anyo19 <- select(anyo19,-PROVINCIA,-MUNICIPIO)
+
+anyo19 <-anyo19[anyo19$MAGNITUD=='6'|anyo19$MAGNITUD=='8'|anyo19$MAGNITUD=='9'|anyo19$MAGNITUD=='10'|anyo19$MAGNITUD=='12'|anyo19$MAGNITUD=='14',]
+
+str(anyo19)
+# tenemos el prolblema que al hacer la media cuenta los valores 0
+# vamos a reemplazar los valores 0.00 por NA ,ya que son valores que no estan medido y gracias a esto podemos hacer media
+anyo19 <-limpia_valoresN(anyo19)
+#anyo19[anyo19==0.00] <-NA
+
+anyo19<-anyo19 %>%
+  mutate("media" = rowMeans (select(anyo19, c(6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66)),na.rm=TRUE))
+
+
+#### año 20
+anyo20 <-read.csv("datos202012.csv",sep=';')
+
+str(anyo20)
+#  vamos a limpiar quito provimcia y municipio
+
+anyo20 <- select(anyo20,-PROVINCIA,-MUNICIPIO)
+
+anyo20 <-anyo20[anyo20$MAGNITUD=='6'|anyo20$MAGNITUD=='8'|anyo20$MAGNITUD=='9'|anyo20$MAGNITUD=='10'|anyo20$MAGNITUD=='12'|anyo20$MAGNITUD=='14',]
+
+str(anyo20)
+# tenemos el prolblema que al hacer la media cuenta los valores 0
+# vamos a reemplazar los valores 0.00 por NA ,ya que son valores que no estan medido y gracias a esto podemos hacer media
+anyo20 <-limpia_valoresN(anyo20)
+#anyo20[anyo20==0.00] <-NA
+
+anyo20<-anyo20 %>%
+  mutate("media" = rowMeans (select(anyo20, c(6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66)),na.rm=TRUE))
+
+
+## año 23
+anyo23 <-read.csv("datos202309.csv",sep=';')
+anyo23 <- select(anyo23,-PROVINCIA,-MUNICIPIO)
+
+anyo23 <-anyo20[anyo23$MAGNITUD=='6'|anyo23$MAGNITUD=='8'|anyo23$MAGNITUD=='9'|anyo23$MAGNITUD=='10'|anyo23$MAGNITUD=='12'|anyo23$MAGNITUD=='14',]
+
+str(anyo23)
+# tenemos el prolblema que al hacer la media cuenta los valores 0
+# vamos a reemplazar los valores 0.00 por NA ,ya que son valores que no estan medido y gracias a esto podemos hacer media
+#anyo23 <-limpia_valoresN(anyo23)
+#anyo23[anyo23==0.00] <-NA
+
+anyo23<-anyo23 %>%
+  mutate("media" = rowMeans (select(anyo23, c(6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66)),na.rm=TRUE))
+
+## problema xq meto valores na en filas.. no se xq?
+##############fin
+
+#### datos globales
+
+
+datos_global<-merge(anyo19,merge(anyo20,anyo21,all = TRUE),all = TRUE)
+
+datos_global<-merge(datos_global,anyo22,all = TRUE)                    
+                    
+lineas2 <- datos_global[datos_global$ANO=='2019'& datos_global$ESTACION=='8' & datos_global$MAGNITUD=='10',]
+
+
+# quitar valors nulos 
+
+sapply(datos_global, function(x) sum(is.na(x)))
+
+
+# idea esto ees unafucnoin
+delete.na <- function(df, n=0) {
+  df[rowSums(is.na(df)) <= n,]
+}
+ 
+#problema hya filas enteras na
+
+# cargamos estaciones calidad aire
+
+estaciones <-read.csv("estaciones_calidad.csv",sep=';',encoding = "UTF-8")
+library(mapview)
+
+library(readxl)
+est <-   read_xls('calidad_aire.xls')
+
+est ['LONGITUD']<-as.numeric(unlist(est ['LONGITUD']))
+est ['LATITUD']<-as.numeric(unlist(est ['LATITUD']))
+#mapview(est$LONGITUD, est$LATITUD )
+###puntos<-cbind(est$LONGITUD , est$LATITUD)
+puntos<-cbind(est$LONGITUD , est$LATITUD, est$CODIGO_CORTO,est$ESTACION)
+puntos2<-as.data.frame(puntos)
+
+puntos2$V1<-as.numeric(puntos2$V1)
+puntos2$V2<-as.numeric(puntos2$V2)
+puntos2
+datos_punto<-puntos2[(puntos2$V3==4),]
+
+
+lineas3 <- datos_global[datos_global$ESTACION==8 & datos_global$MAGNITUD==10,]
+
+estaciones_nombre<-est$ESTACION
+#hay que hacerlo antes de server
+
+est[est$ESTACION=="Villaverde",]$CODIGO_CORTO
+
+### para magnitudes
+codigos <- c("12","08","14","06","10","09")
+Magnitud <- c("Oxidos de Nitrogeno","Dioxido Nitrogeno","Ozono","Monoxido Carbono", "PM10","PM 2.5")
+ 
+Magnitud_DF <- data.frame(codigos,Magnitud)
+Magnitud_DF$Magnitud
+
+dd<- as.numeric(Magnitud_DF[Magnitud_DF$Magnitud=="Ozono",]$codigos)
+#Magnitud_DF[Magnitud_DF$Magnitud==input$magnitud,]$codigos
+###** por aqui##
+###*
+###*https://rpubs.com/santiago_lator/publicar-shiny-101
+###*
+###*
+#
+button_color_css <- "{
+#DivCompClear, #FinderClear, #EnterTimes{
+# Change the background color of the update button
+#to blue. *
+background: DodgerBlue;
+
+/* Change the text size to 15 pixels. */
+font-size: 15px;
+}"
+
+########################## PREDICCION ###################
+
+# MODELO ARIMA
+# ==============================================================================
+
+library(tidyverse)
+library(readxl)
+library(forecast)
+library(lubridate)
+library(tseries)
+
+# Los datos que vamos a ver son 
+datos_global
+
+# si analizamos la prevision de una estacion y una magnitud
+datos_global_ozono <- datos_global[datos_global$ESTACION=='8' & datos_global$MAGNITUD=='14',]
+datos_global_ozono2 <-datos_global_ozono [c("ANO","MES","media")]
+
+
+#vemos que tenemos la evolucion de ozono en estacion..
+# tenbemos en nuestro dataset columnas de año y mes y nuestra media de la magnitud
+
+#Ahora vamos a transformar nuestro conjunto de datos en una serie temporal que asignaremos a una variable Y, indicando el periodo y la frecuencia = 12 (meses), a la que vamos a someter a estudio. La variable objetivo a pronosticar sera el “Índice general”
+#El resultado nos dara la transformacion de nuestros datos originales a formato “ts”, que nos indica que es una serie temporal.
+
+Y <- ts(datos_global_ozono[,"media"], start = c(2019,1), end = c(2022,12), frequency = 12)
+
+Y
+
+#vamos a ver visualmente los datos
+
+autoplot(Y) +
+  ggtitle("indice de ozono") +
+  ylab("magnitud")
+
+
+## descomponemos grfico en 3 : seasonal, trend y resisudos
+
+descomp = decompose(Y)
+autoplot(descomp)
+
+
+adf.test(Y)
+
+# es estacionaria
+
+model <- auto.arima(Y, trace = T, stepwise = F, approximation =F, max.d = 0)
+
+print(model)
+
+checkresiduals(model)
+#-Vamos a hacer ahora una estimacion de este modelo, haciendo un forecast en el que vamos a predecir el valor de las ventas para los proximos 8 meses con un nivel de significancia de un 95%.
+
+mod1 <- forecast(model, 12, level = 95)
+
+mod1
+
+#poner ultimo y para sumar luego
+last_Y = Y[48]
+last_Y
+pred_mod1 = mod1$mean
+pred_mod1
+pron_real = (pred_mod1) + last_Y
+
+# vamos a ver prediccion
+pron_real
+
+pron_real_ts = ts(pron_real, start = c(2023,1), frequency=12)
+
+pron_real_ts
+# vemos original mas predicha
+
+ ts.plot(Y, pron_real_ts, lty = c(1,3), col = c(5,2))
+
+
+
+## graico mas bonio
+library(dygraphs)
+
+graf_inter = cbind(Y,pron_real_ts)
+
+dygraph(graf_inter)
+
+### grafico historico
+lineas3 <- datos_global[datos_global$ESTACION==8 & datos_global$MAGNITUD==10,]
+
+ggplot(data=lineas3, aes(x=MES, y=media,color=ANO))+geom_line(aes(linetype = variable)) + geom_point(colour="#000099") + geom_line(color=lineas3$ANO,size=2) + 
+  labs(title="Variación valores a lo largo años",
+       subtitle="Hay estaciones que no recogen datos de algunas variables",
+       caption="Datos OPEN Data Madrid", 
+       panel.grid.minor = element_blank(),
+       panel.background = element_blank(),
+        x="mes", 
+       y="Valor")  
+
+ggplot()
+
+
+ggplot(lineas3) + geom_line(aes(MES, media, group = (ANO), color = ANO), alpha = 0.8) 
+
+
+##### interpolacion IDW
+## sobre que interpolamos , sobre el valor maximo de cada estacion,año ultimo
+
+plot(est$LONGITUD, est$LATITUD,add=TRUE)
+
+#primero codificado subset año 2022 //este es el que voy a manter
+datos_max<-datos_global[datos_global$ANO==2022,]
+## hago estos luego cambiara con los inputs,, para todas las estaciones
+datos_max_oz<-datos_max[datos_max$MAGNITUD==6,]
+
+datos_max_oz[datos_max_oz$ESTACION=="4",]$media
+est[4,]$CODIGO_CORTO
+
+datos_max_oz[datos_max_oz$ESTACION==est[1,]$CODIGO_CORTO,]$media
+
+est[3,] 
+max(datos_max_oz[datos_max_oz$ESTACION==est[3,]$CODIGO_CORTO,]$media)
+
+maximo<-NULL 
+  for (l in 1:nrow(est))
+  {
+    maximo [l]<-  
+      max(datos_max_oz[datos_max_oz$ESTACION==est[l,]$CODIGO_CORTO,]$media)
+  }
+
+
+
+estaciones_max <- cbind(est,maximo)
+
+estaciones_max_limpio <-estaciones_max[estaciones_max$maximo>0,]
+
+
+
+datos_asociados <- estaciones_max_limpio
+## creamos rejilla
+library(raster)
+library(tmap)
+library(readxl)
+library(sf)
+library(rgdal)
+library(sf)
+
+
+#0datos_asociados ['LONGITUD']<-as.numeric((datos_asociados['LONGITUD']))
+coordxy <- datos_asociados[,c("LONGITUD","LATITUD")]
+#coordxy ['LONGITUD']<-as.numeric((coordxy ['LONGITUD']))
+#coordxy['LONGITUD']<-as.numeric(unlist(coordxy['LONGITUD']))
+datos_asocidos_esp <- SpatialPointsDataFrame(coords = coordxy, data = datos_asociados,proj4string = CRS("+proj=longlat +datum=WGS84 +no_defs"))
+
+rejilla_i <- as.data.frame(spsample(datos_asocidos_esp, "regular", n=3190000))
+
+names(rejilla_i)<-c("X","Y")
+coordinates(rejilla_i)<- c("X","Y")
+gridded(rejilla_i) <- TRUE # crea objeto spatialpixel
+fullgrid(rejilla_i) <- TRUE
+proj4string(datos_asocidos_esp)<- proj4string(datos_asocidos_esp)
+proj4string(rejilla_i)<-proj4string(datos_asocidos_esp)
+
+#unloadNamespace('mapview')
+#unloadNamespace('terra')
+#remove.packages("gstat")
+#install.packages("gstat")
+#library(sp)
+#library(gstat)# Use la rutina idw de gstat
+library(sp)# Utilizado para la función spsample
+library(raster)
+
+interp <- idw ( maximo ~ 1,datos_asocidos_esp,newdata=rejilla_i, idp=2)
+datos_r<- raster(interp)
+
+
+plot(datos_r)
+library(readxl)
+library(rgdal)
+library(mapview)
+distritos<- readOGR('./Distritos')
+distritosproyectado<- spTransform(distritos, CRS(SRS_string="OGC:CRS84"))
+distritosproyectado
+mapview(distritosproyectado)
+datos_mask <- mask(x = datos_r, mask = distritosproyectado)
+
+plot(datos_mask)
+
+
+library(leaflet)
+library(RColorBrewer)
+pal <- colorNumeric(c("red", "orange", "yellow", "blue", "darkblue"), values(datos_mask),
+                    na.color = "transparent")
+
+leaflet() %>% addTiles() %>%
+  addRasterImage(datos_mask, colors = pal, opacity = 0.6) %>%
+  addLegend(pal = pal, values = values(datos_r),
+            title = "IDW Congregacion x distritos Madrid")
